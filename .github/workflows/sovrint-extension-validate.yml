@@ -1,0 +1,165 @@
+name: SOVRINT Extension Validation
+
+on:
+  pull_request:
+    paths:
+      - "docs/sovrint/**"
+      - "sovrint/**"
+      - "nodejs/src/sovrint.ts"
+      - "nodejs/test/sovrint.test.ts"
+      - "nodejs/src/index.ts"
+      - "python/copilot/sovrint.py"
+      - "python/test_sovrint.py"
+      - "python/copilot/__init__.py"
+      - "go/sovrint.go"
+      - "go/sovrint_test.go"
+      - "cookbook/**/sovrint-governed-session.md"
+      - "SOVRINT_*.md"
+      - ".github/workflows/sovrint-extension-validate.yml"
+  push:
+    branches:
+      - main
+      - feat/sovrint-governed-sdk-profile-v1
+
+permissions:
+  contents: read
+
+jobs:
+  common-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validators
+        run: python -m pip install --disable-pip-version-check PyYAML==6.0.2 jsonschema==4.23.0
+
+      - name: Validate JSON and YAML contracts
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          import yaml
+          from jsonschema import Draft202012Validator, FormatChecker
+
+          for path in Path("sovrint").rglob("*.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"valid json: {path}")
+
+          for path in Path("sovrint").rglob("*.yaml"):
+              yaml.safe_load(path.read_text(encoding="utf-8"))
+              print(f"valid yaml: {path}")
+
+          profile_schema = json.loads(
+              Path("sovrint/schemas/security-profile.schema.json").read_text(encoding="utf-8")
+          )
+          profile_validator = Draft202012Validator(
+              profile_schema,
+              format_checker=FormatChecker(),
+          )
+          for path in Path("sovrint/profiles").glob("*.json"):
+              profile = json.loads(path.read_text(encoding="utf-8"))
+              profile_validator.validate(profile)
+              if profile["audit"]["includeArguments"] is not False:
+                  raise SystemExit(f"profile exposes arguments: {path}")
+              if profile["audit"]["includeResults"] is not False:
+                  raise SystemExit(f"profile exposes results: {path}")
+              print(f"valid profile: {path}")
+
+          event_schema = json.loads(
+              Path("sovrint/schemas/audit-event.schema.json").read_text(encoding="utf-8")
+          )
+          event = json.loads(
+              Path("sovrint/examples/audit-event.example.json").read_text(encoding="utf-8")
+          )
+          Draft202012Validator(
+              event_schema,
+              format_checker=FormatChecker(),
+          ).validate(event)
+          if event.get("metadata", {}).get("simulationOnly") is not True:
+              raise SystemExit("audit example must remain simulation-only")
+          print("valid audit event example")
+          PY
+
+      - name: Validate extension manifest paths
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          import yaml
+
+          manifest = yaml.safe_load(Path("sovrint/manifest.yaml").read_text(encoding="utf-8"))
+          listed = []
+          for value in manifest["components"].values():
+              listed.extend(value)
+          missing = [path for path in listed if not Path(path).exists()]
+          if missing:
+              raise SystemExit(f"manifest paths missing: {missing}")
+          print(f"validated {len(listed)} manifest paths")
+          PY
+
+  nodejs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: nodejs/package-lock.json
+
+      - name: Install Node.js dependencies
+        working-directory: nodejs
+        run: npm ci
+
+      - name: Typecheck Node.js SDK
+        working-directory: nodejs
+        run: npm run typecheck
+
+      - name: Test SOVRINT TypeScript helpers
+        working-directory: nodejs
+        run: npx vitest run test/sovrint.test.ts
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python SDK and test dependencies
+        run: python -m pip install --disable-pip-version-check -e "./python[dev]"
+
+      - name: Compile Python helper
+        run: python -m compileall -q python/copilot/sovrint.py
+
+      - name: Test SOVRINT Python helpers
+        run: pytest -q python/test_sovrint.py
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go/go.mod
+
+      - name: Test SOVRINT Go helpers
+        working-directory: go
+        run: go test -run Sovrint ./...
