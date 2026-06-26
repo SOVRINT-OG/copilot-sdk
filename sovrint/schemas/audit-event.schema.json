@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovrint.local/schemas/copilot-sdk-audit-event.schema.json",
+  "title": "SOVRINT Governed Copilot SDK Audit Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "eventId",
+    "eventClass",
+    "timestampUtc",
+    "profileId",
+    "profileVersion",
+    "sessionId",
+    "decision",
+    "reasonCode",
+    "disclosureClass",
+    "evidenceStatus"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "eventId": {"type": "string", "minLength": 1},
+    "parentEventId": {"type": ["string", "null"]},
+    "eventClass": {
+      "type": "string",
+      "enum": [
+        "PROFILE_APPLIED",
+        "PERMISSION_DECISION",
+        "TOOL_INVOCATION_STARTED",
+        "TOOL_INVOCATION_APPROVED",
+        "TOOL_INVOCATION_REJECTED",
+        "TOOL_INVOCATION_COMPLETED",
+        "TOOL_INVOCATION_FAILED",
+        "SYSTEM_MESSAGE_REPLACE_REJECTED",
+        "POLICY_VIOLATION",
+        "AUDIT_SINK_FAILURE",
+        "EVIDENCE_SUBMISSION_STATUS"
+      ]
+    },
+    "timestampUtc": {"type": "string", "format": "date-time"},
+    "profileId": {"type": "string", "minLength": 1},
+    "profileVersion": {"type": "string", "minLength": 1},
+    "sessionId": {"type": "string", "minLength": 1},
+    "toolCallId": {"type": ["string", "null"]},
+    "toolName": {"type": ["string", "null"]},
+    "permissionKind": {
+      "type": ["string", "null"],
+      "enum": [null, "read", "write", "shell", "url", "mcp", "unknown"]
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["APPROVED", "DENIED", "REJECTED", "FAILED", "RECORDED", "PENDING"]
+    },
+    "reasonCode": {"type": "string", "minLength": 1},
+    "targetClass": {"type": ["string", "null"]},
+    "scopeCommitment": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "governanceReference": {"type": ["string", "null"]},
+    "integrityReference": {"type": ["string", "null"]},
+    "evidenceReference": {"type": ["string", "null"]},
+    "disclosureClass": {
+      "type": "string",
+      "enum": ["PUBLIC", "INTERNAL", "PROTECTED", "RESTRICTED"]
+    },
+    "evidenceStatus": {
+      "type": "string",
+      "enum": ["NOT_SUBMITTED", "SUBMISSION_PENDING", "SUBMITTED", "ACCEPTED", "REJECTED", "QUARANTINED", "RETRYABLE"]
+    },
+    "metadata": {"type": "object"}
+  }
+}
