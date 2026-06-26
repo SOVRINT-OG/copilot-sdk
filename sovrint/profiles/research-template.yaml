@@ -1,0 +1,23 @@
+schema_version: "1.0"
+profile_id: "sovrint.research"
+version: "1.0"
+default_decision: "deny"
+allow_kinds:
+  - read
+deny_kinds: []
+tool_surface_mode: "inherit"
+forbid_system_message_replace: true
+fail_closed_on_audit_error: false
+requires_application_evaluator:
+  - write
+  - shell
+  - url
+  - mcp
+audit:
+  enabled: true
+  include_arguments: false
+  include_results: false
+notes:
+  - "Returning no evaluator decision defers to the profile default."
+  - "Local approval remains local to the application and session."
+  - "Research observations remain distinct from verified findings."
