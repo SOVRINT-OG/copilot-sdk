@@ -6,7 +6,7 @@ JSON-RPC based SDK for programmatic control of GitHub Copilot CLI
 
 from .client import CopilotClient
 from .session import CopilotSession
-from .sovrint import (
+from .sovrint_runtime import (
     SOVRINT_READ_ONLY_PROFILE,
     SOVRINT_RESEARCH_PROFILE,
     SOVRINT_STRICT_PROFILE,
