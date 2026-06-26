@@ -11,21 +11,38 @@ components:
     - docs/sovrint/README.md
     - docs/sovrint/SECURITY_PROFILE.md
     - docs/sovrint/GOVERNANCE_INTEGRITY_EVIDENCE.md
+    - docs/sovrint/API_REFERENCE.md
+    - docs/sovrint/DEPLOYMENT_CHECKLIST.md
+    - SOVRINT_EXTENSION.md
+    - SOVRINT_EXTENSION_ATTRIBUTION.md
+    - SOVRINT_CHANGELOG.md
   common_schemas:
     - sovrint/schemas/security-profile.schema.json
     - sovrint/schemas/audit-event.schema.json
   profiles:
     - sovrint/profiles/strict.json
     - sovrint/profiles/read-only.json
+    - sovrint/profiles/research-template.yaml
+  policies:
+    - sovrint/policy/permission-matrix.yaml
+    - sovrint/policy/audit-event-taxonomy.yaml
+  examples:
+    - sovrint/examples/audit-event.example.json
   language_helpers:
     - nodejs/src/sovrint.ts
     - python/copilot/sovrint.py
     - go/sovrint.go
+  language_tests:
+    - nodejs/test/sovrint.test.ts
+    - python/test_sovrint.py
+    - go/sovrint_test.go
   recipes:
     - cookbook/nodejs/sovrint-governed-session.md
     - cookbook/python/sovrint-governed-session.md
     - cookbook/go/sovrint-governed-session.md
     - cookbook/dotnet/sovrint-governed-session.md
+  validation:
+    - .github/workflows/sovrint-extension-validate.yml
 
 interfaces:
   governance_runtime: "SOVRINT-OG/sovrint-governance-runtime"
