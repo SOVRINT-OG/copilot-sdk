@@ -11,6 +11,28 @@
 export { CopilotClient } from "./client.js";
 export { CopilotSession, type AssistantMessageEvent } from "./session.js";
 export { defineTool } from "./types.js";
+export {
+    SOVRINT_READ_ONLY_PROFILE,
+    SOVRINT_RESEARCH_PROFILE,
+    SOVRINT_STRICT_PROFILE,
+    SOVRINT_SYSTEM_APPEND,
+    applySovrintProfile,
+    createSovrintPermissionHandler,
+    wrapSovrintTool,
+} from "./sovrint.js";
+export type {
+    SovrintApplyProfileOptions,
+    SovrintAuditDecision,
+    SovrintAuditEvent,
+    SovrintAuditEventClass,
+    SovrintAuditSink,
+    SovrintPermissionDecision,
+    SovrintPermissionEvaluator,
+    SovrintPermissionHandlerOptions,
+    SovrintSecurityProfile,
+    SovrintToolGuardOptions,
+    SovrintToolSurfaceMode,
+} from "./sovrint.js";
 export type {
     ConnectionState,
     CopilotClientOptions,
