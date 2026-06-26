@@ -1,0 +1,43 @@
+schema_version: "1.0"
+extension_id: "sovrint-governed-copilot-sdk"
+version: "1.0"
+author: "Katrina Pietroniro"
+framework: "SOVRINT™"
+status: "additive-extension"
+upstream_protocol_modified: false
+
+components:
+  documentation:
+    - docs/sovrint/README.md
+    - docs/sovrint/SECURITY_PROFILE.md
+    - docs/sovrint/GOVERNANCE_INTEGRITY_EVIDENCE.md
+  common_schemas:
+    - sovrint/schemas/security-profile.schema.json
+    - sovrint/schemas/audit-event.schema.json
+  profiles:
+    - sovrint/profiles/strict.json
+    - sovrint/profiles/read-only.json
+  language_helpers:
+    - nodejs/src/sovrint.ts
+    - python/copilot/sovrint.py
+    - go/sovrint.go
+  recipes:
+    - cookbook/nodejs/sovrint-governed-session.md
+    - cookbook/python/sovrint-governed-session.md
+    - cookbook/go/sovrint-governed-session.md
+    - cookbook/dotnet/sovrint-governed-session.md
+
+interfaces:
+  governance_runtime: "SOVRINT-OG/sovrint-governance-runtime"
+  integrity_engine: "SOVRINT-OG/integrity-engine"
+  provenance_ledger: "SOVRINT-OG/sovrint-provenance-ledger"
+  federation_runtime: "SOVRINT-OG/sovrint-federation-runtime"
+
+invariants:
+  - "The upstream Copilot SDK JSON-RPC protocol remains unchanged."
+  - "Existing SDK users are unaffected unless they import and apply the SOVRINT helpers."
+  - "System-message replacement is forbidden by built-in SOVRINT profiles."
+  - "Unknown permission kinds are denied."
+  - "The most restrictive composed permission decision wins."
+  - "Audit events are not represented as EvidenceGrid acceptance."
+  - "The extension does not create governance authority."
