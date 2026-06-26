@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "profileId": "sovrint.strict",
+  "version": "1.0",
+  "description": "Conservative governed-session profile.",
+  "defaultDecision": "deny",
+  "allowKinds": [],
+  "denyKinds": ["read", "write", "shell", "url", "mcp"],
+  "availableTools": [],
+  "excludedTools": [],
+  "forbidSystemMessageReplace": true,
+  "failClosedOnAuditError": true,
+  "systemMessageAppend": "Use only explicitly exposed tools and preserve governance, integrity, and evidence boundaries.",
+  "audit": {
+    "enabled": true,
+    "includeRequestMetadata": true,
+    "includeArguments": false,
+    "includeResults": false
+  },
+  "metadata": {
+    "toolSurfaceMode": "none"
+  }
+}
