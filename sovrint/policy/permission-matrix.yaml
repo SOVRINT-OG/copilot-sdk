@@ -1,0 +1,52 @@
+schema_version: "1.0"
+author: "Katrina Pietroniro"
+framework: "SOVRINT™"
+
+permission_kinds:
+  read:
+    strict: DENY
+    read_only: APPROVE
+    research: APPROVE
+    notes: "Application-specific path and data classification checks may still deny."
+  write:
+    strict: DENY
+    read_only: DENY
+    research: EVALUATE
+    notes: "Requires explicit scope and application policy."
+  shell:
+    strict: DENY
+    read_only: DENY
+    research: EVALUATE
+    notes: "Requires explicit command and environment policy."
+  url:
+    strict: DENY
+    read_only: DENY
+    research: EVALUATE
+    notes: "Requires destination and disclosure policy."
+  mcp:
+    strict: DENY
+    read_only: DENY
+    research: EVALUATE
+    notes: "Requires named server and named tool policy."
+
+precedence:
+  - EXPLICIT_DENY
+  - APPLICATION_EVALUATOR
+  - PROFILE_ALLOW
+  - PROFILE_DEFAULT
+  - EXISTING_HANDLER
+  - FINAL_DECISION
+
+unknown_kind: DENY
+
+composition:
+  rule: "Most restrictive decision wins."
+  existing_handler_denial_preserved: true
+  evaluator_error: DENY
+  audit_failure_when_fail_closed: DENY
+
+invariants:
+  - "Permission approval is session-scoped unless a narrower scope is declared."
+  - "A local approval is not a global governance decision."
+  - "Tool availability and permission approval are separate gates."
+  - "Unknown fields are not treated as proof of safe scope."

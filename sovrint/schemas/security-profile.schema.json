@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovrint.local/schemas/copilot-sdk-security-profile.schema.json",
+  "title": "SOVRINT Governed Copilot SDK Security Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileId",
+    "version",
+    "defaultDecision",
+    "allowKinds",
+    "denyKinds",
+    "availableTools",
+    "excludedTools",
+    "forbidSystemMessageReplace",
+    "failClosedOnAuditError",
+    "systemMessageAppend",
+    "audit"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0"
+    },
+    "profileId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,63}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "defaultDecision": {
+      "type": "string",
+      "enum": ["approve", "deny"]
+    },
+    "allowKinds": {
+      "$ref": "#/$defs/permissionKinds"
+    },
+    "denyKinds": {
+      "$ref": "#/$defs/permissionKinds"
+    },
+    "availableTools": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "excludedTools": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "forbidSystemMessageReplace": {
+      "type": "boolean"
+    },
+    "failClosedOnAuditError": {
+      "type": "boolean"
+    },
+    "systemMessageAppend": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 12000
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "includeRequestMetadata", "includeArguments", "includeResults"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "includeRequestMetadata": {"type": "boolean"},
+        "includeArguments": {"const": false},
+        "includeResults": {"const": false}
+      }
+    },
+    "mcp": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowedServers": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "requireNamedToolAllowlist": {
+          "type": "boolean"
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowedDirectories": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "disabledSkills": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "not": {
+        "properties": {
+          "allowKinds": {
+            "contains": {"enum": ["shell", "write", "mcp", "url"]}
+          },
+          "defaultDecision": {"const": "approve"}
+        },
+        "required": ["allowKinds", "defaultDecision"]
+      }
+    }
+  ],
+  "$defs": {
+    "permissionKinds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["read", "write", "shell", "url", "mcp"]
+      },
+      "uniqueItems": true
+    }
+  }
+}
