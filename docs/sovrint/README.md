@@ -19,7 +19,7 @@ It provides:
 - bounded audit events;
 - governance, integrity, and EvidenceGrid interface contracts;
 - simulation-safe examples;
-- language-specific helpers for TypeScript, Python, and Go;
+- language-specific session-profile helpers for TypeScript, Python, Go, and .NET;
 - recipes for TypeScript, Python, Go, and .NET;
 - schema and CI validation.
 
@@ -81,7 +81,7 @@ Profiles are templates, not universal safety guarantees. The application remains
 | TypeScript / Node.js | First-class helper module and unit tests |
 | Python | First-class helper module and unit tests |
 | Go | First-class helper module and unit tests |
-| .NET | Governed-session recipe using native SDK interfaces |
+| .NET | First-class session-profile helper, unit tests, and governed-session recipe |
 | Common | JSON schemas, profiles, policies, examples, CI |
 
 ## Repository Additions
@@ -99,7 +99,9 @@ sovrint/
   examples/
 nodejs/src/sovrint.ts
 python/copilot/sovrint.py
-go/sovrint.go
+go/sovrint_*.go
+dotnet/src/Sovrint.cs
+dotnet/test/SovrintTests.cs
 cookbook/*/sovrint-governed-session.md
 ```
 
