@@ -47,10 +47,12 @@ components:
     - go/sovrint_tool_finish.go
     - go/sovrint_tool_outcome.go
     - go/sovrint_tool_wrap.go
+    - dotnet/src/Sovrint.cs
   language_tests:
     - nodejs/test/sovrint.test.ts
     - python/test_sovrint.py
     - go/sovrint_test.go
+    - dotnet/test/SovrintTests.cs
   recipes:
     - cookbook/nodejs/sovrint-governed-session.md
     - cookbook/python/sovrint-governed-session.md
