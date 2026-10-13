@@ -31,7 +31,9 @@ public sealed class SovrintTests
     [Fact]
     public async Task ReadOnlyProfileApprovesReadAndDeniesWrite()
     {
-        var handler = SovrintProfiles.CreatePermissionHandler(SovrintProfiles.ReadOnly);
+        var handler = SovrintProfiles.CreatePermissionHandler(
+            SovrintProfiles.ReadOnly,
+            new SovrintPermissionHandlerOptions { AuditSink = _ => { } });
 
         var read = await handler(
             new PermissionRequest { Kind = "read" },
