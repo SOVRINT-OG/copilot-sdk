@@ -1,9 +1,13 @@
 name: "Setup Copilot"
 description: "Setup Copilot based on the project's package.json file."
+outputs:
+  path:
+    description: "Path to the Copilot CLI entry point."
+    value: ${{ steps.cli-path.outputs.path }}
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v6
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
       with:
         cache: "npm"
         cache-dependency-path: "./nodejs/package-lock.json"
