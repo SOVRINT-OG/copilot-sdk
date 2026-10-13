@@ -20,6 +20,8 @@ concurrency:
 
 jobs:
   nodejs-sdk:
+    env:
+      COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
     name: "Node.js SDK Tests"
     strategy:
       fail-fast: false
@@ -61,12 +63,17 @@ jobs:
         run: pwsh.exe -Command "Write-Host 'PowerShell ready'"
 
       - name: Run Node.js SDK tests
+        if: env.COPILOT_HMAC_KEY != ''
         env:
-          COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
           COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: npm test
+      - name: Skip Node.js live tests without integration secret
+        if: env.COPILOT_HMAC_KEY == ''
+        run: echo "Skipping live SDK tests because the integration HMAC secret is unavailable."
 
   go-sdk:
+    env:
+      COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
     name: "Go SDK Tests"
     strategy:
       fail-fast: false
@@ -114,12 +121,17 @@ jobs:
         run: pwsh.exe -Command "Write-Host 'PowerShell ready'"
 
       - name: Run Go SDK tests
+        if: env.COPILOT_HMAC_KEY != ''
         env:
-          COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
           COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: /bin/bash test.sh
+      - name: Skip Go live tests without integration secret
+        if: env.COPILOT_HMAC_KEY == ''
+        run: echo "Skipping live SDK tests because the integration HMAC secret is unavailable."
 
   python-sdk:
+    env:
+      COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
     name: "Python SDK Tests"
     strategy:
       fail-fast: false
@@ -164,12 +176,17 @@ jobs:
         run: pwsh.exe -Command "Write-Host 'PowerShell ready'"
 
       - name: Run Python SDK tests
+        if: env.COPILOT_HMAC_KEY != ''
         env:
-          COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
           COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: uv run pytest -v -s
+      - name: Skip Python live tests without integration secret
+        if: env.COPILOT_HMAC_KEY == ''
+        run: echo "Skipping live SDK tests because the integration HMAC secret is unavailable."
 
   dotnet-sdk:
+    env:
+      COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
     name: ".NET SDK Tests"
     strategy:
       fail-fast: false
@@ -221,6 +238,8 @@ jobs:
         run: pwsh.exe -Command "Write-Host 'PowerShell ready'"
 
       - name: Run .NET SDK tests
-        env:
-          COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
+        if: env.COPILOT_HMAC_KEY != ''
         run: dotnet test --no-build -v n
+      - name: Skip .NET live tests without integration secret
+        if: env.COPILOT_HMAC_KEY == ''
+        run: echo "Skipping live SDK tests because the integration HMAC secret is unavailable."
