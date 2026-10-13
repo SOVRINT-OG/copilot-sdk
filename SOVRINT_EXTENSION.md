@@ -6,7 +6,7 @@
 
 This repository includes a governed-session extension around the existing Copilot SDK interfaces. The upstream JSON-RPC protocol remains unchanged.
 
-The extension includes permission profiles, session-configuration helpers, custom-tool guards, bounded audit events, shared schemas, tests, and cross-language recipes.
+The extension includes permission profiles, session-configuration helpers, custom-tool guards in TypeScript, Python, and Go, bounded audit events, shared schemas, tests, and cross-language recipes. TypeScript, Python, Go, and .NET now include tested session-profile helpers.
 
 ## Documentation
 
