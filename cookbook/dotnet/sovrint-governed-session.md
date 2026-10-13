@@ -1,6 +1,6 @@
 # SOVRINT Governed Session — .NET
 
-The TypeScript, Python, and Go packages in this repository include first-class SOVRINT helper modules. This .NET recipe applies the same control principles through the documented native `SessionConfig` surface.
+The .NET SDK includes a first-class `SovrintProfiles` helper for permission composition, tool-surface projection, MCP and skill filtering, system-message append protection, and bounded audit events. This recipe applies the helper through the native `SessionConfig` surface; it does not alter the SDK protocol or create global governance authority.
 
 ## Conservative profile
 
@@ -47,11 +47,11 @@ static SessionConfig ApplySovrintStrictProfile(SessionConfig config)
 await using var client = new CopilotClient();
 await client.StartAsync();
 
-var config = ApplySovrintStrictProfile(new SessionConfig
+var config = SovrintProfiles.ApplyProfile(new SessionConfig
 {
     Model = "gpt-5",
     Streaming = true,
-});
+}, SovrintProfiles.Strict);
 
 await using var session = await client.CreateSessionAsync(config);
 await session.SendAsync(new MessageOptions
