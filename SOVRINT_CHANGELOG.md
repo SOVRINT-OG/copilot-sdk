@@ -14,9 +14,10 @@ Added:
 - TypeScript helper module and tests;
 - Python helper module and tests;
 - Go helper module and tests;
+- .NET session-profile helper and unit tests;
 - TypeScript, Python, Go, and .NET recipes;
 - root extension index and attribution;
-- cross-language validation workflow.
+- cross-language validation workflow including .NET helper tests.
 
 Compatibility:
 
