@@ -1,0 +1,87 @@
+name: SDK Build and Unit Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sdk-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nodejs:
+    name: Node.js SDK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nodejs
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: nodejs/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Run isolated URL parsing unit tests
+        run: npx vitest run test/client.test.ts --testNamePattern="URL parsing"
+
+  python:
+    name: Python SDK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: python/uv.lock
+      - run: uv sync --locked --all-extras --dev
+      - run: uv run ruff check
+      - run: uv run ty check copilot
+      - name: Run isolated unit tests
+        run: uv run pytest test_jsonrpc.py test_event_forward_compatibility.py
+      - run: uv build
+
+  go:
+    name: Go SDK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: go
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version: "1.23"
+          cache-dependency-path: go/go.sum
+      - run: go vet ./...
+      - run: go test .
+
+  dotnet:
+    name: .NET SDK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dotnet
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+      - run: dotnet restore GitHub.Copilot.SDK.sln
+      - run: dotnet build GitHub.Copilot.SDK.sln --no-restore --configuration Release
