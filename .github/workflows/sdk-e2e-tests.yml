@@ -34,6 +34,7 @@ jobs:
           cache-dependency-path: "./nodejs/package-lock.json"
           node-version: 22
       - uses: ./.github/actions/setup-copilot
+        id: setup-copilot
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
@@ -58,7 +59,7 @@ jobs:
       - name: Run Node.js SDK tests
         env:
           COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
-          COPILOT_CLI_PATH: ${{ steps.cli-path.outputs.path }}
+          COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: npm test
 
   go-sdk:
@@ -75,6 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-copilot
+        id: setup-copilot
       - uses: actions/setup-go@v6
         with:
           go-version: "1.23"
@@ -110,7 +112,7 @@ jobs:
       - name: Run Go SDK tests
         env:
           COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
-          COPILOT_CLI_PATH: ${{ steps.cli-path.outputs.path }}
+          COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: /bin/bash test.sh
 
   python-sdk:
@@ -127,6 +129,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-copilot
+        id: setup-copilot
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -159,7 +162,7 @@ jobs:
       - name: Run Python SDK tests
         env:
           COPILOT_HMAC_KEY: ${{ secrets.COPILOT_DEVELOPER_CLI_INTEGRATION_HMAC_KEY }}
-          COPILOT_CLI_PATH: ${{ steps.cli-path.outputs.path }}
+          COPILOT_CLI_PATH: ${{ steps.setup-copilot.outputs.path }}
         run: uv run pytest -v -s
 
   dotnet-sdk:
@@ -176,6 +179,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/setup-copilot
+        id: setup-copilot
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "8.0.x"
