@@ -21,7 +21,7 @@ def apply_sovrint_profile(
     current = config.get("system_message")
     if current and current.get("mode") == "replace":
         if profile.forbid_system_message_replace:
-            message = f"Profile '{profile.profile_id}' forbids the requested system mode"
+            message = f"SOVRINT profile '{profile.profile_id}' forbids system-message replacement"
             raise ValueError(message)
     else:
         existing = (current or {}).get("content", "").strip()
