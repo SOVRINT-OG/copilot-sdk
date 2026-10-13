@@ -2,6 +2,25 @@
 default:
     @just --list
 
+# Build every SDK package
+build: build-nodejs build-python build-go build-dotnet
+
+build-nodejs:
+    @echo "=== Building Node.js SDK ==="
+    @cd nodejs && npm ci --ignore-scripts && npm run build
+
+build-python:
+    @echo "=== Building Python SDK ==="
+    @cd python && uv build
+
+build-go:
+    @echo "=== Building Go SDK ==="
+    @cd go && go build ./...
+
+build-dotnet:
+    @echo "=== Building .NET SDK ==="
+    @cd dotnet && dotnet build GitHub.Copilot.SDK.sln --configuration Release
+
 # Format all code across all languages
 format: format-go format-python format-nodejs format-dotnet
 
