@@ -31,7 +31,22 @@ components:
   language_helpers:
     - nodejs/src/sovrint.ts
     - python/copilot/sovrint.py
-    - go/sovrint.go
+    - go/sovrint_audit_event.go
+    - go/sovrint_audit_runtime.go
+    - go/sovrint_permission_contract.go
+    - go/sovrint_permission_eval.go
+    - go/sovrint_permission_handler.go
+    - go/sovrint_permission_result.go
+    - go/sovrint_profile.go
+    - go/sovrint_session_apply.go
+    - go/sovrint_session_surface.go
+    - go/sovrint_slice.go
+    - go/sovrint_tool_contract.go
+    - go/sovrint_tool_event.go
+    - go/sovrint_tool_execute.go
+    - go/sovrint_tool_finish.go
+    - go/sovrint_tool_outcome.go
+    - go/sovrint_tool_wrap.go
   language_tests:
     - nodejs/test/sovrint.test.ts
     - python/test_sovrint.py
