@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Threading;
 using GitHub.Copilot.SDK;
 
@@ -318,7 +317,7 @@ public static class SovrintProfiles
 
         return configured.Select(agent =>
         {
-            var tools = profile.ToolSurfaceMode switch
+            List<string>? tools = profile.ToolSurfaceMode switch
             {
                 SovrintToolSurfaceMode.None => [],
                 SovrintToolSurfaceMode.Allowlist => (agent.Tools ?? profile.AvailableTools.ToList())
@@ -345,7 +344,7 @@ public static class SovrintProfiles
     private static List<string> MergeUnique(
         IEnumerable<string>? left,
         IEnumerable<string> right) =>
-        (left ?? []).Concat(right).Distinct(StringComparer.Ordinal).ToList();
+        (left ?? Enumerable.Empty<string>()).Concat(right).Distinct(StringComparer.Ordinal).ToList();
 
     private static string JoinText(string? existing, string appended) =>
         string.Join("\n\n", new[] { existing?.Trim(), appended.Trim() }
