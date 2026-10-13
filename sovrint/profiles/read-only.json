@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "profileId": "sovrint.read-only",
+  "version": "1.0",
+  "description": "Read-oriented governed-session profile.",
+  "defaultDecision": "deny",
+  "allowKinds": ["read"],
+  "denyKinds": ["write", "shell", "url", "mcp"],
+  "availableTools": [],
+  "excludedTools": [],
+  "forbidSystemMessageReplace": true,
+  "failClosedOnAuditError": true,
+  "systemMessageAppend": "Operate in read-only mode. Do not mutate files, execute shell commands, access external URLs, or invoke MCP operations without a separate explicit approval path.",
+  "audit": {
+    "enabled": true,
+    "includeRequestMetadata": true,
+    "includeArguments": false,
+    "includeResults": false
+  },
+  "metadata": {
+    "toolSurfaceMode": "inherit"
+  }
+}

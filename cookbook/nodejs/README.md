@@ -4,6 +4,7 @@ This folder hosts short, practical recipes for using the GitHub Copilot SDK with
 
 ## Recipes
 
+- [SOVRINT Governed Session](sovrint-governed-session.md): Apply deny-by-default profiles, bounded permission handling, custom-tool guards, and audit events.
 - [Error Handling](error-handling.md): Handle errors gracefully including connection failures, timeouts, and cleanup.
 - [Multiple Sessions](multiple-sessions.md): Manage multiple independent conversations simultaneously.
 - [Managing Local Files](managing-local-files.md): Organize files by metadata using AI-powered grouping strategies.
@@ -16,4 +17,4 @@ Add a new recipe by creating a markdown file in this folder and linking it above
 
 ## Status
 
-This README is a scaffold; recipe files are placeholders until populated.
+The SOVRINT governed-session recipe is implemented and backed by SDK unit tests. Other listed recipes may remain scaffolds until populated.

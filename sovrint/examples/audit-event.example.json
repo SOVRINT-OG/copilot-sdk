@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "eventId": "SOVRINT-AUDIT-0001",
+  "parentEventId": null,
+  "eventClass": "PERMISSION_DECISION",
+  "timestampUtc": "2026-06-26T23:55:00Z",
+  "profileId": "sovrint.read-only",
+  "profileVersion": "1.0",
+  "sessionId": "SIMULATION-SESSION-001",
+  "toolCallId": "SIMULATION-TOOL-CALL-001",
+  "toolName": null,
+  "permissionKind": "write",
+  "decision": "DENIED",
+  "reasonCode": "PROFILE_EXPLICIT_DENY",
+  "targetClass": "filesystem",
+  "scopeCommitment": "1111111111111111111111111111111111111111111111111111111111111111",
+  "governanceReference": null,
+  "integrityReference": null,
+  "evidenceReference": null,
+  "disclosureClass": "INTERNAL",
+  "evidenceStatus": "NOT_SUBMITTED",
+  "metadata": {
+    "simulationOnly": true,
+    "requestMetadataIncluded": false
+  }
+}

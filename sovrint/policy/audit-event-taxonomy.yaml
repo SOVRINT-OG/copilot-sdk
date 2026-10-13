@@ -1,0 +1,59 @@
+schema_version: "1.0"
+author: "Katrina Pietroniro"
+framework: "SOVRINT™"
+
+event_classes:
+  PROFILE_APPLIED:
+    decision_values: [RECORDED]
+  PERMISSION_DECISION:
+    decision_values: [APPROVED, DENIED]
+  TOOL_INVOCATION_STARTED:
+    decision_values: [PENDING]
+  TOOL_INVOCATION_APPROVED:
+    decision_values: [APPROVED]
+  TOOL_INVOCATION_REJECTED:
+    decision_values: [REJECTED]
+  TOOL_INVOCATION_COMPLETED:
+    decision_values: [RECORDED]
+  TOOL_INVOCATION_FAILED:
+    decision_values: [FAILED]
+  SYSTEM_MESSAGE_REPLACE_REJECTED:
+    decision_values: [DENIED]
+  POLICY_VIOLATION:
+    decision_values: [DENIED, REJECTED, FAILED]
+  AUDIT_SINK_FAILURE:
+    decision_values: [FAILED]
+  EVIDENCE_SUBMISSION_STATUS:
+    decision_values: [PENDING, RECORDED, FAILED]
+
+reason_codes:
+  - UNKNOWN_PERMISSION_KIND
+  - PROFILE_EXPLICIT_DENY
+  - PROFILE_EXPLICIT_ALLOW
+  - PROFILE_DEFAULT_DENY
+  - PROFILE_DEFAULT_ALLOW
+  - APPLICATION_EVALUATOR_APPROVED
+  - APPLICATION_EVALUATOR_DENIED
+  - APPLICATION_EVALUATOR_FAILED
+  - DOWNSTREAM_HANDLER_DENIED
+  - DOWNSTREAM_HANDLER_FAILED
+  - AUDIT_SINK_UNAVAILABLE
+  - TOOL_INVOCATION_RECEIVED
+  - CUSTOM_TOOL_AUTHORIZED
+  - CUSTOM_TOOL_AUTHORIZATION_DENIED
+  - CUSTOM_TOOL_COMPLETED
+  - CUSTOM_TOOL_FAILED
+
+privacy:
+  include_prompts: false
+  include_responses: false
+  include_tool_arguments: false
+  include_tool_results: false
+  include_credentials: false
+  include_raw_file_contents: false
+
+invariants:
+  - "Every event carries a profile identifier and version."
+  - "Every permission decision carries a reason code."
+  - "Tool events carry a session and tool-call reference."
+  - "Audit events are not represented as EvidenceGrid blocks."
